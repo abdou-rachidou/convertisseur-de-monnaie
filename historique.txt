@@ -1,0 +1,12 @@
+[
+    {
+        "Devises": "USD en EUR",
+        "montant": "23.0 USD",
+        "resultat": "21.555763823805062 EUR"
+    },
+    {
+        "Devises": "GBP en EUR",
+        "montant": "64.0 GBP",
+        "resultat": "73.43239056852734 EUR"
+    }
+]
