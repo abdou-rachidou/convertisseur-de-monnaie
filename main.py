@@ -5,27 +5,75 @@ import sys
 c = CurrencyRates()
 historique = []
 
+
 print("\n")
 print("Bonjour et Bienvenue dans mon programme de conversion.")
 
+
 def menu():
-    print("1. Faire une nouvelle convertion")
+    print("1. Faire une nouvelle conversion")
     print("2. Afficher l'Historique")
-    print("3. Quitter le programme")
+    print("3. Afficher la liste des devises")
+    print("4. Ajouter une nouvelle devise")
+    print("5. Quitter le programme")
+
 
 def activate_menu():
-    global historique 
+    global historique, devises_pays
+    # Chargement des devises depuis le fichier
+    devises_pays = load_devises_from_file()
     menu()
     print("\n")
-    user = input("Veuillez choisir un nombre (1-3) : ")
+    user = input("Veuillez choisir un nombre (1-5) : ")
     if user == '1':
         convertisseur()
     elif user == '2':
         historique = load_file()
         print(historique)
     elif user == '3':
+        afficher_liste_devises()
+    elif user == '4':
+        ajouter_nouvelle_devise()
+    elif user == '5':
         print("Fin du programme, Au revoir !")
         sys.exit()  # Terminer le programme
+
+
+def load_devises_from_file(filename="devises.json"):
+    try:
+        with open(filename, 'r') as file:
+            devises_pays = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        devises_pays = {}
+
+    return devises_pays
+
+# Chargement des devises depuis le fichier
+devises_pays = load_devises_from_file()
+
+
+
+def save_devises_to_file(devises_pays, filename="devises.json"):
+    with open(filename, 'w') as file:
+        json.dump(devises_pays, file, indent=4)
+
+
+def afficher_liste_devises():
+    global devises_pays
+    print("Liste des devises et de leurs pays correspondants :")
+    for devise, pays in devises_pays.items():
+        print(f"{devise} : {pays}")
+
+
+
+def ajouter_nouvelle_devise():
+    global devises_pays
+    nouvelle_devise = input("Veuillez entrer le code de la nouvelle devise (ex: USD) : ").upper()
+    nouveau_pays = input("Veuillez entrer le pays correspondant à la nouvelle devise : ")
+    devises_pays[nouvelle_devise] = nouveau_pays
+    save_devises_to_file(devises_pays)
+    print(f"La nouvelle devise ({nouvelle_devise}) a été ajoutée avec succès.")
+
 
 def load_file(filename="historique.txt"):
     try:
